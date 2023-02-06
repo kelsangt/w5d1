@@ -41,6 +41,8 @@ class IntSet
   end
 
   def insert(num)
+    mod = num % num_buckets
+    @store[mod] << num
   end
 
   def remove(num)
@@ -53,6 +55,7 @@ class IntSet
 
   def [](num)
     # optional but useful; return the bucket corresponding to `num`
+    return @store[num-1]
   end
 
   def num_buckets
