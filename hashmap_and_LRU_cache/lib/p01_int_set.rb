@@ -1,3 +1,5 @@
+require "byebug"
+
 class MaxIntSet
   attr_reader :max, :store
 
@@ -82,10 +84,14 @@ class ResizingIntSet
   def initialize(num_buckets = 20)
     @store = Array.new(num_buckets) { Array.new }
     @count = 0
+    @num_buckets = num_buckets
   end
 
   def insert(num)
     
+    if @count == num_buckets 
+      resize!
+    end
     mod = num % num_buckets
     if !@store[mod - 1].include?(num)
       @store[mod - 1] << num
@@ -118,11 +124,12 @@ class ResizingIntSet
   end
 
   def num_buckets
+    # debugger
     @store.length
   end
 
   def resize!
-    if @count == num_buckets - 1
+    if @count == @num_buckets 
       final_arr = []
 
       @store.each do |sub_arr|
@@ -131,8 +138,9 @@ class ResizingIntSet
         end
       end
 
-      num_buckets *= 2
-      @store = Array.new(num_buckets) { Array.new }
+      @num_buckets *= 2
+      @store = Array.new(@num_buckets) { Array.new }
+      @count = 0
       final_arr.each do |ele|
         insert(ele)
       end
