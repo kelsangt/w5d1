@@ -77,6 +77,7 @@ end
 
 class ResizingIntSet
   attr_reader :count
+  attr_accessor :store
 
   def initialize(num_buckets = 20)
     @store = Array.new(num_buckets) { Array.new }
@@ -122,7 +123,19 @@ class ResizingIntSet
 
   def resize!
     if @count == num_buckets - 1
-      num_buckets = num_buckets * 2
+      final_arr = []
+
+      @store.each do |sub_arr|
+        sub_arr.each do |ele|
+          final_arr << ele
+        end
+      end
+
+      num_buckets *= 2
+      @store = Array.new(num_buckets) { Array.new }
+      final_arr.each do |ele|
+        insert(ele)
+      end
     end
   end
 end
