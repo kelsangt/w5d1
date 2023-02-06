@@ -36,19 +36,31 @@ end
 
 
 class IntSet
+  attr_accessor :store
   def initialize(num_buckets = 20)
     @store = Array.new(num_buckets) { Array.new }
   end
 
   def insert(num)
     mod = num % num_buckets
-    @store[mod] << num
+    @store[mod - 1] << num
   end
 
   def remove(num)
+    @store.each do |sub_arr|
+      if sub_arr.include?(num)
+        sub_arr.delete(num)
+      end
+    end
   end
 
   def include?(num)
+    @store.each do |sub_arr|
+      if sub_arr.include?(num)
+        return true 
+      end
+    end
+    return false
   end
 
   private
@@ -72,12 +84,23 @@ class ResizingIntSet
   end
 
   def insert(num)
+    mod = num % num_buckets
+    @store[mod - 1] << num
+    @store.each do |sub_arr|
+      if !sub_arr.include?(num)
+    end
   end
 
   def remove(num)
   end
 
   def include?(num)
+    @store.each do |sub_arr|
+      if sub_arr.include?(num)
+        return true 
+      end
+    end
+    return false
   end
 
   private
