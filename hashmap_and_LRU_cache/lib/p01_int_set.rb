@@ -88,18 +88,16 @@ class ResizingIntSet
     mod = num % num_buckets
     if !@store[mod - 1].include?(num)
       @store[mod - 1] << num
+      @count += 1
     end
     
   end
 
   def remove(num)
-    if @store.include?(num)
-      @store.each do |sub_arr|
-        if sub_arr.include?(num)
-          sub_arr.delete(num)
-          count -= 1
-        end
-      end
+    mod = num % num_buckets
+    if @store[mod - 1].include?(num)
+      @store[mod - 1].delete(num)
+      @count -= 1
     end
   end
 
@@ -123,5 +121,8 @@ class ResizingIntSet
   end
 
   def resize!
+    if @count == num_buckets - 1
+      num_buckets = num_buckets * 2
+    end
   end
 end
